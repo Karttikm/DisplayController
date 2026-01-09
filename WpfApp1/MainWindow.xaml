@@ -1,0 +1,26 @@
+﻿<Window x:Class="DisplayController.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DisplayController"
+        mc:Ignorable="d"
+        Title="Windows Display Conroller" Height="250" Width="400" WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="Windows Display Controller"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
+            <Button Content="Apply Display Change"
+                    Height="45"
+                    Margin="0,0,0,10"
+                    Click="Apply_Click"/>
+            <Button Content="Revert Display Change"
+                    Height="45"
+                    Click="Revert_Click"/>
+        </StackPanel>
+    
+    </Grid>
+</Window>
