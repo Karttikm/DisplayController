@@ -40,6 +40,7 @@ namespace DisplayController
         public static void RevertDisplaySettings()
         {
             SetDisplayResolution(originalWidth, originalHeight);
+            SetDisplayScaling(originalDpi);
         }
 
         public static void SetDisplayScaling(int scalingPercent)

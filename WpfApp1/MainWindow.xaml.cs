@@ -24,13 +24,12 @@ namespace DisplayController
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            DisplayManager.SetDisplayResolution(1920, 1080);
+            DisplayManager.SetDisplayResolution(1024, 768);
             DisplayManager.SetDisplayScaling(100);
-			MessageBox.Show("Successfully Applid Display Changes!");
-		}
+        }
         private void Revert_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Reverted to Original Display Settings!");
+            DisplayManager.RevertDisplaySettings();
 		}
 	}
 }
