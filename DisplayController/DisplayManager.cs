@@ -1,6 +1,4 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace DisplayController
@@ -54,16 +52,32 @@ namespace DisplayController
                 200 => 192,
                 _ => 96
             };
-            Registry.SetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", dpi);
-            Registry.SetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1);
-            Process.Start("explorer.exe");
+            Registry.SetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", dpi, RegistryValueKind.DWord);
+            Registry.SetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1, RegistryValueKind.DWord);
         }
 
-        static int GetScaling()
+        public static int GetScaling()
         {
-            var dpiObj = Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96);
-            int dpi = dpiObj is int value ? value : 96;
-            return dpi * 100 / 96;
+            using var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop\PerMonitorSettings");
+            if(key == null) return 100;
+            foreach(var monitor in key.GetSubKeyNames())
+            {
+                using var subKey = key.OpenSubKey(monitor);
+                if(subKey == null) continue;
+                var dpiValue = subKey.GetValue("DpiValue");
+                if (dpiValue == null) continue;
+                int dpiIndex = (int)dpiValue;
+                return dpiIndex switch
+                {
+                    0 => 100,
+                    1 => 125,
+                    2 => 150,
+                    3 => 175,
+                    4 => 200,
+                    _ => 100
+                };
+            }
+            return 100;
         }
 
         #region Win32
@@ -71,7 +85,7 @@ namespace DisplayController
         const int DM_PELSWIDTH = 0x80000;
         const int DM_PELSHEIGHT = 0x100000;
 
-        [DllImport("user32.dll", CharSet = CharSet.Ansi)]
+        [DllImport("user32.dll")]
         static extern bool EnumDisplaySettings(string deviceName, int modeNum, ref DEVMODE devMode);
 
         [DllImport("user32.dll")]
